@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using NovaWebSolution.Services;
 
 namespace NovaWebSolution.Controllers
 {
@@ -15,13 +16,11 @@ namespace NovaWebSolution.Controllers
     [Authenticate]
     public class FormController : Controller
     {
-        //private readonly IToastNotification _toastNotification;
         private readonly IFormsRepository formsRepository;
         private string LoggedInUserID;
         public FormController()
         {
             this.formsRepository = new FormsRepository(new AppDbContext()); ;
-            //_toastNotification = toastNotification;
         }
 
         [HttpGet]
@@ -64,21 +63,21 @@ namespace NovaWebSolution.Controllers
 
                 List<FormQueryDto> formQueryDtos = new List<FormQueryDto>()
                 {
-                    new FormQueryDto { FormQuery = new FormQuery() { FormQueryText = "First Name" } , IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "Last Name" } , IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "Email" } , IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "SSN" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "Phone" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "Bank Name" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "A/C No" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() {FormQueryText = "Loan Amount" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "City" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "State" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "ZIP" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "Date of Birth" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "Licence No." }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "Licence State" }, IsChecked = false },
-                    new FormQueryDto {FormQuery = new FormQuery() { FormQueryText = "IP" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "First Name" } , IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "Last Name" } , IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "Email" } , IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "SSN" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "Phone" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "Bank Name" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "A/C No" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() {FormQueryText = "Loan Amount" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "City" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "State" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "ZIP" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "Date of Birth" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "Licence No." }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "Licence State" }, IsChecked = false },
+                    new FormQueryDto {  FormQuery = new FormQuery() { FormQueryText = "IP" }, IsChecked = false },
                 };
 
                 createFormDto.formQueryDtos = formQueryDtos;
@@ -138,11 +137,12 @@ namespace NovaWebSolution.Controllers
 
             if (forms.FormIsSubmit)
             {
-                //_toastNotification.AddSuccessToastMessage("Form Submited Successfully");
+                ToastrNotificationService.AddSuccessNotification("Form Submited Successfully", null);
                 return RedirectToAction("Index", new { id = "submit" });
             }
 
-            //_toastNotification.AddSuccessToastMessage("Form Saved Successfully");
+            ToastrNotificationService.AddSuccessNotification("Form Saved Successfully", null);
+
             return RedirectToAction("Index", new { id = "save" });
         }
 
@@ -208,8 +208,7 @@ namespace NovaWebSolution.Controllers
 
             formsRepository.CreateFormQuery(formQueryList);
 
-            //_toastNotification.AddSuccessToastMessage("Query Saved Successfully");
-            //_toastNotification.AddSuccessToastMessage();
+            ToastrNotificationService.AddSuccessNotification("Query Saved Successfully", null);
 
             return RedirectToAction("Create", "Form", new { id = id });
         }

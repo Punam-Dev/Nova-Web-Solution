@@ -164,6 +164,11 @@ namespace NovaWebSolution.Repository
 
             return await appDbContext.Database.ExecuteSqlCommandAsync("Update Users SET WorkStatus = 0 Where UserID != {0}", excludeUserID);
         }
+        public void SaveUserLogInDetails(UserLogInDetails userLogInDetails)
+        {
+            var result = appDbContext.UserLogInDetails.Add(userLogInDetails);
+            appDbContext.SaveChanges();
+        }
 
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)

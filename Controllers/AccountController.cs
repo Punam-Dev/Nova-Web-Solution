@@ -51,6 +51,11 @@ namespace NovaWebSolution.Controllers
         [HttpPost]
         public async Task<ActionResult> LogIn(UserLogInDto userLogInDto, string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var user = await accountRepository.GetUserByUserNameAndPassword(userLogInDto.UserName, userLogInDto.Password);
             UserLogInDetails userLogInDetails = new UserLogInDetails();
 
@@ -78,13 +83,12 @@ namespace NovaWebSolution.Controllers
 
                 FormsAuthentication.SetAuthCookie(userLogInDto.UserName, false);
 
-                if (Request.QueryString["ReturnUrl"] != null)
-                {
-                    return Redirect(Request.QueryString["ReturnUrl"].ToString());
-                }
-
-
                 userLogInDetails.UserIP = Request.UserHostAddress.ToString();
+                userLogInDetails.CreatedDate = DateTime.Now;
+                userLogInDetails.IsLogIn = true;
+                userLogInDetails.UserID = user.UserID;
+
+                accountRepository.SaveUserLogInDetails(userLogInDetails);
 
                 TempData["UserID"] = user.UserID;
 
@@ -178,12 +182,12 @@ namespace NovaWebSolution.Controllers
                     await accountRepository.UpdateUser(user);
 
                     string body = "Hello " + user.FirstName + " " + user.LastName + "," +
-                        "<br/><br/> Welcome to dotindiapvtltd" +
+                        "<br/><br/> Welcome to Nova Web Solution" +
                         "<br/><br/> Your login credential is, " +
                         "<br/>Username: " + userName +
                         "<br/>Password: " + password +
-                        "<br/><br/>URL to Login:<a href=\"https://dotindiapvtltd.in\">https://dotindiapvtltd.in</a> <br/>Thank You.";
-                    await _emailSender.SendEmailAsync(user.Email, "Welcome to dotindiapvtltd", body);
+                        "<br/><br/>URL to Login:<a href=\"https://novawebsolution.co.in\">https://novawebsolution.co.in</a> <br/>Thank You.";
+                    await _emailSender.SendEmailAsync(user.Email, "Welcome to Nova Web Solution", body);
 
                     return Json(signUpDto);
 
@@ -246,6 +250,14 @@ namespace NovaWebSolution.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
+                UserLogInDetails userLogInDetails = new UserLogInDetails();
+                userLogInDetails.UserIP = Request.UserHostAddress.ToString();
+                userLogInDetails.CreatedDate = DateTime.Now;
+                userLogInDetails.IsLogIn = false;
+                userLogInDetails.UserID = Convert.ToString(Session["userid"]);
+
+                accountRepository.SaveUserLogInDetails(userLogInDetails);
+
                 FormsAuthentication.SignOut();
                 Session.Abandon(); // it will clear the session at the end of request
                 Session.Clear();

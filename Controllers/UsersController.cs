@@ -37,7 +37,7 @@ namespace NovaWebSolution.Controllers
             string userID = Convert.ToString(Session["userid"]);
             var noOfRowsAffected = await accountRepository.StopWorkStatusOfAllUser(userID);
 
-            ToastrNotificationService.AddSuccessNotification("Proceess completed successfully", null);
+            ToastrNotificationService.AddSuccessNotification("Work Status of all user are changed to inactive", null);
 
             return RedirectToAction("Index");
         }
@@ -45,9 +45,17 @@ namespace NovaWebSolution.Controllers
         [HttpPost]
         public ActionResult Delete(string id)
         {
-            accountRepository.DeleteUser(id);
+            string loggedInUserID = Convert.ToString(Session["userid"]);
 
-            ToastrNotificationService.AddSuccessNotification("User deleted successfully", null);
+            if (id == loggedInUserID)
+            {
+                ToastrNotificationService.AddWarningNotification("You can not delete yourself", null);
+            }
+            else
+            {
+                accountRepository.DeleteUser(id);
+                ToastrNotificationService.AddSuccessNotification("User deleted successfully", null);
+            }
 
             return RedirectToAction("Index");
         }
@@ -61,7 +69,7 @@ namespace NovaWebSolution.Controllers
             string strWorkStatus = workStatus == true ? "active" : "inactive";
             if (userID == loggedInUserID)
             {
-                ToastrNotificationService.AddWarningNotification("You can't change your Work Status yourself", null);
+                ToastrNotificationService.AddWarningNotification("You can not change your Work Status yourself", null);
             }
             else
             {
@@ -93,8 +101,7 @@ namespace NovaWebSolution.Controllers
                     users.OTP = randomNumber;
                     await accountRepository.CreateUser(users);
 
-                    string verifyOTPUrl = $"{this.Request.Url.Scheme}://{this.Request.Url.Host}/Account/VerifyOTP/{users.UserID}";
-
+                    string verifyOTPUrl = $"{this.Request.Url.AbsoluteUri}Account/VerifyOTP/{users.UserID}";
 
                     string body = "Hello " + users.FirstName + " " + users.LastName + "," +
                         "<br/><br/> Welcome to <b>Nova Web Solution</b>" +

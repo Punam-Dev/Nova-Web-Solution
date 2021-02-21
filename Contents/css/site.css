@@ -410,7 +410,7 @@ input.primary:checked + .slider {
     background-color: #2196F3;
 }
 
-input.success:checked + .slider {
+input.success:checked + input[type="hidden"] + .slider {
     background-color: #28a745;
 }
 
@@ -430,7 +430,7 @@ input:focus + .slider {
     box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked + .slider:before {
+input:checked + input[type="hidden"] +.slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
