@@ -20,7 +20,7 @@ namespace NovaWebSolution.Controllers
         private string LoggedInUserID;
         public FormController()
         {
-            this.formsRepository = new FormsRepository(new AppDbContext()); ;
+            this.formsRepository = new FormsRepository(new AppDbContext());
         }
 
         [HttpGet]
