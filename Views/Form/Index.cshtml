@@ -1,0 +1,56 @@
+﻿@using NovaWebSolution.Models;
+@{
+    ViewBag.Title = "Index";
+}
+@model IEnumerable<Forms>
+@{
+    var FormType = ViewContext.RouteData.Values["id"];
+    string strTitle = "";
+    if (FormType != null)
+    {
+        if (FormType.ToString().ToLower() == "submit")
+        {
+            strTitle = "Submit Form List";
+        }
+        else if (FormType.ToString().ToLower() == "save")
+        {
+            strTitle = "Save Form List";
+        }
+        else
+        {
+            strTitle = "All Form List";
+        }
+    }
+    else
+    {
+        strTitle = "All Form List";
+    }
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-4">@strTitle</h3>
+                <table id="Datatable" class="table table-striped table-bordered table-responsive-md" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.FormsID</td>
+                                <td>@(item.FormIsSubmit == true ? "Submit" : "Save")</td>
+                                <td><a  href="@Url.Action("Create","Form", new { id = item.FormsID })">View Form</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

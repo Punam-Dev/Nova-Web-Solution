@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>*@
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="~/Contents/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js" type="text/javascript"></script>*@
+
+    <link rel="stylesheet" href="~/Contents/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/Contents/css/site.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/fontawesome.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/brands.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/solid.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/regular.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/v4-shims.css" />
+
+    @RenderSection("Style", false)
+    <script>
+        $(function () {
+            $(".datepicker").datepicker();
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-success border-bottom box-shadow mb-3 navy-blue-skin">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" href="@Url.Action("Index","Home")">NovaWebSolution</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Index","Home")">Dashboard</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Work Load
+                            </a>
+                            <div class="dropdown-menu dropdown-p" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="@Url.Action("Create","Form", new { id = "" })">Current Work Load</a>
+                                <a class="dropdown-item" href="@Url.Action("Index","Form", new { id = "All" })">All Form</a>
+                                <a class="dropdown-item" href="@Url.Action("Index","Form", new { id = "Save" })">Save Form</a>
+                                <a class="dropdown-item" href="@Url.Action("Index","Form", new { id = "submit" })">Submit Form</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Query","Form")">Query</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Report","Form")">Report</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("Privacy","Home")">Agreement</a>
+                        </li>
+                        @{
+                            var userRoles = Convert.ToString(Context.Session["roles"]);
+
+                            if (userRoles != null && userRoles.ToLower() == "admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" href="@Url.Action("Index","Users")">Admin Pannel</a>
+                                </li>
+                            }
+                        }
+
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" href="#">
+                                <i class="fa fa-calendar-alt" aria-hidden="true"></i>
+                                Date: @DateTime.Now.ToString("dd MMM yyyy")
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            @using (Html.BeginForm("LogOut", "Account"))
+                            {
+                                <input type="submit" value="Log Out" class="nav-link text-light bg-transparent border-0" />
+                            }
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-light page-footer">
+        <div class="container text-center">
+            &copy; @DateTime.Now.Year - Copyright: NovaWebSolution
+        </div>
+    </footer>
+
+    <script src="~/Contents/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Contents/js/site.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Datatable').DataTable();
+
+            $("input[type='text']").each(function () {
+                $(this).attr("autocomplete", "off");
+            });
+            //console.log($("input[type='text']"));
+            //console.log("1");
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

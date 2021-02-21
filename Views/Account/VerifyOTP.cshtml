@@ -1,0 +1,146 @@
+﻿@using NovaWebSolution.Dtos;
+@model VerifyOTPDto
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DotIndiaPvtLtd1</title>
+    <link rel="stylesheet" href="~/Contents/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/fontawesome.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/brands.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/solid.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/regular.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/v4-shims.css" />
+
+    <link href="~/Contents/css/mdb.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .intro-2 {
+            background: url("http://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img%20(11).jpg")no-repeat center center;
+            background-size: cover;
+        }
+
+        .top-nav-collapse {
+            background-color: #3f51b5 !important;
+        }
+
+        .navbar:not(.top-nav-collapse) {
+            background: transparent !important;
+        }
+
+        @@media (max-width: 768px) {
+            .navbar:not(.top-nav-collapse) {
+                background: #3f51b5 !important;
+            }
+        }
+
+        .card {
+            background-color: rgba(229, 228, 255, 0.2);
+        }
+
+        .md-form label {
+            color: #ffffff;
+        }
+
+        h6 {
+            line-height: 1.7;
+        }
+
+        html,
+        body,
+        header,
+        .view {
+            height: 100%;
+        }
+
+        @@media (min-width: 560px) and (max-width: 740px) {
+            html,
+            body,
+            header,
+            .view {
+                height: 650px;
+            }
+        }
+
+        @@media (min-width: 800px) and (max-width: 850px) {
+            html, body, header, .view {
+                height: 650px;
+            }
+        }
+
+        .card {
+            margin-top: 30px;
+        }
+
+        .md-form input[type=text]:focus:not([readonly]), .md-form input[type=password]:focus:not([readonly]) {
+            border-bottom: 1px solid #8EDEF8;
+            box-shadow: 0 1px 0 0 #8EDEF8;
+        }
+
+            .md-form input[type=text]:focus:not([readonly]) + label, .md-form input[type=password]:focus:not([readonly]) + label {
+                color: #8EDEF8;
+            }
+
+        .md-form .form-control {
+            color: #fff;
+        }
+
+        .navbar.navbar-dark form .md-form input:focus:not([readonly]) {
+            border-color: #8EDEF8;
+        }
+
+        @@media (min-width: 800px) and (max-width: 850px) {
+            .navbar:not(.top-nav-collapse) {
+                background: #3f51b5 !important;
+            }
+        }
+
+        .btn.btn-lg {
+            padding: 6px 15px 6px 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <section class="view intro-2">
+            <div class="mask rgba-stylish-strong h-100 d-flex justify-content-center align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-6 col-md-10 col-sm-12 mx-auto mt-5">
+                            <form method="post">
+                                <div class="card wow fadeIn" data-wow-delay="0.3s">
+                                    <div class="card-body">
+                                        <div class="form-header purple-gradient" style="margin-top: -60px; margin-bottom: 0px;">
+                                            <h3><i class="fa fa-user mt-2 mb-2"></i>Activate to your Account</h3>
+                                        </div>
+                                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                                        <br>
+                                        <div class="md-form">
+                                            @Html.TextBoxFor(x => x.OTP, new { @style = "width: 100%" })
+                                            @Html.LabelFor(x => x.OTP, new { @style = "top: -0.35rem" })
+                                            @*<input type="text" asp-for="OTP" style="width: 100%">
+                                                <label for="orangeForm-email" style="top: -0.35rem">Verify OTP</label>
+                                                <span asp-validation-for="OTP"></span>*@
+                                        </div>
+                                        <div class="text-center">
+                                            <input type="submit" value="Verify OTP" class="btn purple-gradient btn-lg">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </header>
+
+    <script src="~/Contents/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/Contents/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Contents/js/mdb.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+﻿@using NovaWebSolution.Dtos;
+@{
+    ViewBag.Title = "Login";
+}
+
+@model UserLogInDto
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - NovaWebSolution</title>
+    <link rel="stylesheet" href="~/Contents/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/Contents/css/site.css"/>
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/fontawesome.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/brands.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/solid.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/regular.css" />
+    <link rel="stylesheet" href="~/Contents/font-awesome/css/v4-shims.css" />
+
+    <style type="text/css">
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #60a3bc !important;
+        }
+
+        .user_card {
+            height: 400px;
+            width: 350px;
+            margin-top: auto;
+            margin-bottom: auto;
+            background: #f39c12;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            padding: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 5px;
+        }
+
+        .brand_logo_container {
+            position: absolute;
+            height: 170px;
+            width: 170px;
+            top: -75px;
+            border-radius: 50%;
+            background: #60a3bc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .brand_logo {
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .form_container {
+            margin-top: 100px;
+        }
+
+        .login_container {
+            padding: 0 2rem;
+        }
+
+        .input_user, .input_pass:focus {
+            box-shadow: none !important;
+            outline: 0px !important;
+        }
+
+        .login_btn {
+            width: 100%;
+            background: #c0392b !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container h-100">
+        <div class="d-flex justify-content-center h-100">
+            <div class="user_card">
+                <div class="d-flex justify-content-center">
+                    <div class="brand_logo_container">
+                        <img src="https://cdn.freebiesupply.com/logos/large/2x/pinterest-circle-logo-png-transparent.png" class="brand_logo" />
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center form_container">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            </div>
+                            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control input_user", @placeholder = "username" })
+                            @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="input-group mb-2">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-key"></i>
+                                </span>
+                            </div>
+                            @Html.TextBoxFor(x => x.Password, new { @class = "form-control input_user", @placeholder = "password" })
+                            @Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="d-flex justify-content-center mt-3 login_container">
+                            <input type="submit" value="Login" class="btn login_btn" />
+                        </div>
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                    }
+                    @*<form method="post">
+                    </form>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Contents/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/Contents/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="~/Contents/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/Contents/js/site.js"></script>
+</body>
+</html>
