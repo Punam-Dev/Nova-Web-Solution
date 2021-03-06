@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using NovaWebSolution.Services;
+using System.IO;
+using System.Web.Hosting;
 
 namespace NovaWebSolution.Controllers
 {
@@ -17,22 +19,51 @@ namespace NovaWebSolution.Controllers
     public class FormController : Controller
     {
         private readonly IFormsRepository formsRepository;
+        private readonly IAccountRepository accountRepository;
         private string LoggedInUserID;
         public FormController()
         {
             this.formsRepository = new FormsRepository(new AppDbContext());
+            this.accountRepository = new AccountRepository(new AppDbContext());
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            return View();
+            LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
+            var user = accountRepository.GetUserByID(LoggedInUserID);
+
+            if (user.WorkStatus == false)
+            {
+                return RedirectToAction("Report");
+            }
+
+            CreateFormDto createFormDto = new CreateFormDto();
+            Forms forms = new Forms();
+
+            //forms.FormNo = (await formsRepository.GetMaxFormNoOfUser(LoggedInUserID)) + 1;
+            forms.FormNo = (await formsRepository.GetTotalSubmitedFormOfUser(LoggedInUserID)) + 1;
+            forms.FormImagePath = "~/QuestionsImages/" + forms.FormNo.ToString() + ".PNG";
+
+            createFormDto.Forms = forms;
+
+            createFormDto.MaxFormCountOfUser = await formsRepository.GetMaxFormNoOfUser(LoggedInUserID);
+
+            return View(createFormDto);
         }
 
         [Route("Form/Create/{id}")]
         [HttpGet]
         public async Task<ActionResult> Create(string id)
         {
+            LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
+            var user = accountRepository.GetUserByID(LoggedInUserID);
+
+            if (user.WorkStatus == false)
+            {
+                return RedirectToAction("Report");
+            }
+
             if (!string.IsNullOrEmpty(id))
             {
                 var Form = await formsRepository.GetFormByID(Convert.ToInt64(id));
@@ -58,6 +89,8 @@ namespace NovaWebSolution.Controllers
                 forms.LicenceNo = Form.LicenceNo;
                 forms.LicenceState = Form.LicenceState;
                 forms.IP = Form.IP;
+                forms.FormNo = Form.FormNo;
+                forms.FormImagePath = Form.FormImagePath;
 
                 createFormDto.Forms = forms;
 
@@ -108,6 +141,8 @@ namespace NovaWebSolution.Controllers
             forms.LicenceNo = createFormDto.Forms.LicenceNo;
             forms.LicenceState = createFormDto.Forms.LicenceState;
             forms.IP = createFormDto.Forms.IP;
+            forms.FormNo = createFormDto.Forms.FormNo;
+            forms.FormImagePath = createFormDto.Forms.FormImagePath;
 
             if (submit == "Submit")
             {
@@ -117,7 +152,7 @@ namespace NovaWebSolution.Controllers
             {
                 forms.FormIsSubmit = false;
             }
-            forms.UserCreatedDate = DateTime.Now;
+            forms.FormsCreatedDate = DateTime.Now;
 
             if (TempData.ContainsKey("UserID"))
             {
@@ -126,7 +161,7 @@ namespace NovaWebSolution.Controllers
 
             if (!string.IsNullOrEmpty(LoggedInUserID))
             {
-                forms.UserCreatedByUserID = LoggedInUserID;
+                forms.FormsCreatedByUserID = LoggedInUserID;
             }
             else
             {
@@ -150,6 +185,14 @@ namespace NovaWebSolution.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(string id)
         {
+            LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
+            var user = accountRepository.GetUserByID(LoggedInUserID);
+
+            if (user.WorkStatus == false)
+            {
+                return RedirectToAction("Report");
+            }
+
             bool? isSubmit;
             if (id.ToLower() == "save")
             {
@@ -216,6 +259,14 @@ namespace NovaWebSolution.Controllers
         [HttpGet]
         public async Task<ActionResult> Query()
         {
+            LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
+            var user = accountRepository.GetUserByID(LoggedInUserID);
+
+            if (user.WorkStatus == false)
+            {
+                return RedirectToAction("Report");
+            }
+
             if (TempData.ContainsKey("UserID"))
             {
                 LoggedInUserID = TempData.Peek("UserID").ToString();
