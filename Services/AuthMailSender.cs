@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Net.Configuration;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
@@ -14,15 +16,19 @@ namespace NovaWebSolution.Services
         {
             try
             {
-                var senderEmail = new MailAddress("Sender email", "Display name");
+                SmtpSection section = (SmtpSection)ConfigurationManager.GetSection("system.net/mailSettings/smtp");
+
+                var senderEmail = new MailAddress(section.From, "Nova Web Solution");
                 var receiverEmail = new MailAddress(toEmail);
-                var password = "your email password";
+                //var password = "punam@123";
+                var password = section.Network.Password;
                 var sub = subject;
+
                 var smtp = new SmtpClient
                 {
-                    Host = "smtp.gmail.com",
-                    Port = 587,
-                    EnableSsl = true,
+                    Host = section.Network.Host,
+                    Port = section.Network.Port,
+                    EnableSsl = section.Network.EnableSsl,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
                     UseDefaultCredentials = false,
                     Credentials = new NetworkCredential(senderEmail.Address, password)
@@ -38,9 +44,9 @@ namespace NovaWebSolution.Services
                     await smtp.SendMailAsync(mess);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
     }

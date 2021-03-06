@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace NovaWebSolution.Models
 {
+    //[Table("UserLogInDetails", Schema = "novaweb")]
+    [Table("UserLogInDetails")]
     public class UserLogInDetails
     {
         public Int64 UserLogInDetailsID { get; set; }

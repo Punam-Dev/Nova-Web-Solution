@@ -7,6 +7,7 @@ using System.Web;
 
 namespace NovaWebSolution.Models
 {
+    //[Table("FormQuery", Schema = "novaweb")]
     [Table("FormQuery")]
     public class FormQuery
     {

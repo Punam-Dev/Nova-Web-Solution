@@ -16,5 +16,7 @@ namespace NovaWebSolution.Repository
         void DeleteForm(Int64 FormID);
         Task<IEnumerable<FormQuery>> GetFormQueries(string LoggedInUserID);
         void CreateFormQuery(List<FormQuery> formQueries);
+        Task<int> GetMaxFormNoOfUser(string userid);
+        Task<int> GetTotalSubmitedFormOfUser(string userid);
     }
 }

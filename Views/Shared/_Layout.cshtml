@@ -23,24 +23,39 @@
     <link rel="stylesheet" href="~/Contents/font-awesome/css/solid.css" />
     <link rel="stylesheet" href="~/Contents/font-awesome/css/regular.css" />
     <link rel="stylesheet" href="~/Contents/font-awesome/css/v4-shims.css" />
+    <link href="~/Contents/toastr.css" rel="stylesheet" />
 
     @RenderSection("Style", false)
     <script>
         $(function () {
-            $(".datepicker").datepicker({ dateFormat: 'dd-mm-yy' });
+            $(".datepicker").prop("readonly", true);
+
+            $(".datepicker").datepicker({
+                dateFormat: 'yy-mm-dd',
+                changeYear: true,
+                onSelect: function (dateText, inst) {
+                    if ($(this).hasClass('datepicker')) {
+                        if ($(this).val().trim() != "") {
+                            $(this).addClass('has-val');
+                        }
+                        else {
+                            $(this).removeClass('has-val');
+                        }
+                    }
+                } });
         });
     </script>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-success border-bottom box-shadow mb-3 navy-blue-skin">
+        <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-success border-bottom box-shadow mb-3 navy-blue-skin">
             <div class="container-fluid">
                 <a class="navbar-brand text-white" href="@Url.Action("Index","Home")">NovaWebSolution</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-light" href="@Url.Action("Index","Home")">Dashboard</a>
@@ -111,6 +126,7 @@
     <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
     <script src="~/Contents/js/site.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -119,6 +135,23 @@
             $("input[type='text']").each(function () {
                 $(this).attr("autocomplete", "off");
             });
+
+            $('.input100').each(function () {
+                $(this).on('blur', function () {
+                    if ($(this).val().trim() != "") {
+                        $(this).addClass('has-val');
+                    }
+                    else {
+                        $(this).removeClass('has-val');
+                    }
+                })
+                if ($(this).val().trim() != "") {
+                    $(this).addClass('has-val');
+                }
+                else {
+                    $(this).removeClass('has-val');
+                }
+            })
         });
     </script>
     @RenderSection("Scripts", required: false)

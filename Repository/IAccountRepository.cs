@@ -20,5 +20,6 @@ namespace NovaWebSolution.Repository
         void UpdateWorkStatus(string userID, bool workStatus, string loggedInUserID);
         Task<int> StopWorkStatusOfAllUser(string excludeUserID);
         void SaveUserLogInDetails(UserLogInDetails userLogInDetails);
+        Task<List<UserLogInDetails>> GetUserLogInDetailsByID(string userid);
     }
 }

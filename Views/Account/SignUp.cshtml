@@ -68,6 +68,9 @@
                     success: function (res) {
                         window.location.replace('/Account/LogIn');
                     },
+                    error: function (err) {
+                        console.log(err);
+                    },
                     dataType: 'json'
                 });
             }

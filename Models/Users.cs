@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace NovaWebSolution.Models
 {
+   // [Table("Users", Schema = "novaweb")]
+    [Table("Users")]
     public class Users
     {
         [Key]
@@ -48,6 +51,7 @@ namespace NovaWebSolution.Models
         public int? OTP { get; set; }
         public string DigitalSignPath { get; set; }
         public string AgreementPath { get; set; }
+        public int MaxFormsCount { get; set; }
         public string UserCreatedByUserID { get; set; }
         public DateTime UserCreatedDate { get; set; }
         public string UserUpdatedByUserID { get; set; }

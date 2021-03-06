@@ -10,5 +10,6 @@ namespace NovaWebSolution.Dtos
     {
         public Forms Forms { get; set; }
         public List<FormQueryDto> formQueryDtos { get; set; }
+        public int MaxFormCountOfUser { get; set; }
     }
 }

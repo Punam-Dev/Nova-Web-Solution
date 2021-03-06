@@ -4,195 +4,187 @@
 }
 
 @model CreateFormDto
-@{
-
+@if (Model.MaxFormCountOfUser < Model.Forms.FormNo)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5>
+                <strong>You have submitted maximum allocated forms</strong>
+            </h5>
+            Please contact your manager for more details...
+        </div>
+    </div>
 }
+else
+{
+    <div class="card">
+        <div class="card-body">
+            <h1 class="text-center"> Form</h1>
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    @if (ViewContext.RouteData.Values["id"] != null)
+                    {
+                        <button class="btn btn-secondary ml-2" data-toggle="modal" data-target="#QueryModal">QUERY</button>
 
-
-<div class="card">
-    <div class="card-body">
-        <h1 class="text-center"> Form</h1>
-        <div class="row">
-            <div class="col-md-12 mb-4">
-                @if (ViewContext.RouteData.Values["id"] != null)
-                {
-                    <button class="btn btn-secondary ml-2" data-toggle="modal" data-target="#QueryModal">QUERY</button>
-
-                    <div class="modal fade" id="QueryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <ul class="nav md-tabs tabs-2 light-blue darken-3" role="tablist" style="margin: -1.5rem 1rem 0;">
-                                    <li class="nav-item w-100">
-                                        <a class="nav-link active text-center" data-toggle="tab" href="#panel17" role="tab"><i class="fa fa-user mr-1"></i>Submit Query</a>
-                                    </li>
-                                </ul>
-                                @using (Html.BeginForm("FormQuery", "Form", FormMethod.Post))
-                                {
-                                    <div class="modal-body">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    @for (int i = 0; i < Model.formQueryDtos.Count; i++)
-                                                    {
-                                                        <div class="col-md-4 my-3">
-                                                            <div class="form-check">
-                                                                @*<input type="checkbox" class="form-check-input" asp-for="@Model.formQueryDtos[i].IsChecked">*@
-                                                                @Html.CheckBoxFor(x => x.formQueryDtos[i].IsChecked, new { @class = "form-check-input" })
-                                                                <label class="form-check-label">@Model.formQueryDtos[i].FormQuery.FormQueryText</label>
-                                                                @*<input type="hidden" asp-for="@Model.formQueryDtos[i].FormQueryText" />*@
-                                                                @Html.HiddenFor(x =>  Model.formQueryDtos[i].FormQuery.FormQueryText)
+                        <div class="modal fade" id="QueryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <ul class="nav md-tabs tabs-2 light-blue darken-3" role="tablist" style="margin: -1.5rem 1rem 0;">
+                                        <li class="nav-item w-100">
+                                            <a class="nav-link active text-center" data-toggle="tab" href="#panel17" role="tab"><i class="fa fa-user mr-1"></i>Submit Query</a>
+                                        </li>
+                                    </ul>
+                                    @using (Html.BeginForm("FormQuery", "Form", FormMethod.Post))
+                                    {
+                                        <div class="modal-body">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        @for (int i = 0; i < Model.formQueryDtos.Count; i++)
+                                                        {
+                                                            <div class="col-md-4 my-3">
+                                                                <div class="form-check">
+                                                                    @Html.CheckBoxFor(x => x.formQueryDtos[i].IsChecked, new { @class = "form-check-input" })
+                                                                    <label class="form-check-label">@Model.formQueryDtos[i].FormQuery.FormQueryText</label>
+                                                                    @Html.HiddenFor(x => Model.formQueryDtos[i].FormQuery.FormQueryText)
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    }
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <input type="submit" class="navy-blue-skin btn btn-primary text-white" value="Submit" />
-                                    </div>
-                                }
-                                @*<form method="post" asp-action="FormQuery" asp-controller="Form" asp-route-id="@(Model == null ? "" : Model.FormsID.ToString())">
-                                </form>*@
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <input type="submit" class="navy-blue-skin btn btn-primary text-white" value="Submit" />
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
             </div>
-        </div>
-        @using (Html.BeginForm())
-        {
-            <div class="row">
-                <div class="col-md-12 mb-4 mb-5">
-                    <img src="~/Contents/image/100.png" style="height:500px;width:1070px;" />
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.FirstName, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="FirstName">*@
-                        <span class="focus-input100" data-placeholder="First Name"></span>
+            @using (Html.BeginForm())
+            {
+                <div class="row">
+                    <div class="col-md-12 mb-4 mb-5">
+                        @*<img src="@Url.Content(@Model.Forms.FormImagePath)" style="height:500px;width:1070px;" />*@
+                        <img src="@Url.Content(@Model.Forms.FormImagePath)" class="img-fluid" />
+                        @Html.HiddenFor(x => x.Forms.FormNo)
+                        @Html.HiddenFor(x => x.Forms.FormImagePath)
                     </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.LastName, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="LastName">*@
-                        <span class="focus-input100" data-placeholder="Last Name"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.Email, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="Email">*@
-                        <span class="focus-input100" data-placeholder="Email ID"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.SSN, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="SSN">*@
-                        <span class="focus-input100" data-placeholder="SSN"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.Phone, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="Phone">*@
-                        <span class="focus-input100" data-placeholder="Phone"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.BankName, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="BankName">*@
-                        <span class="focus-input100" data-placeholder="Bank Name"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.AccountNo, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="AccountNo">*@
-                        <span class="focus-input100" data-placeholder="A/C No"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.LoanAmount, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="LoanAmount">*@
-                        <span class="focus-input100" data-placeholder="Loan Amount"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.Address, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="Address">*@
-                        <span class="focus-input100" data-placeholder="Address"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.City, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" name="username" style="border: none;" asp-for="City">*@
-                        <span class="focus-input100" data-placeholder="City"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.State, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="State">*@
-                        <span class="focus-input100" data-placeholder="State"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.Zip, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="Zip">*@
-                        <span class="focus-input100" data-placeholder="ZIP"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.DOB, new { @class = "input100 form-control datepicker", @style = "border: none;", @autocomplete = "off"})
-                        @*<input class="input100 form-control datepicker" type="text" readonly="readonly" autocomplete="off" style="border: none;" asp-for="DOB">*@
-                        <span class="focus-input100" data-placeholder="Select DOB"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.LicenceNo, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="LicenceNo">*@
-                        <span class="focus-input100" data-placeholder="License Number"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.LicenceState, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="LicenceState">*@
-                        <span class="focus-input100" data-placeholder="License State"></span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <div class="wrap-input100 validate-input mt-4 mb-5">
-                        @Html.TextBoxFor(x => x.Forms.IP, new { @class = "input100 form-control", @style = "border: none;" })
-                        @*<input class="input100 form-control" type="text" style="border: none;" asp-for="IP">*@
-                        <span class="focus-input100" data-placeholder="IP"></span>
-                    </div>
-                </div>
-                @if (ViewContext.RouteData.Values["id"] == null)
-                {
-                    <div class="col-md-12 mb-4">
-                        <div class="text-center">
-                            <input type="submit" class="btn p-2 px-4 navy-blue-skin btn-primary text-white border-0 mr-2" name="submit" value="Submit" />
-                            <input type="submit" class="btn btn-info p-2 px-4 text-white border-0" name="submit" value="Save" />
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.FirstName, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="First Name"></span>
                         </div>
                     </div>
-                }
-            </div>
-        }
-        @*<form asp-controller="Form" asp-action="Create" method="post" asp-route-id="@(Model == null ? "" : Model.FormsID.ToString())">
-        </form>*@
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.LastName, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="Last Name"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.Email, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="Email ID"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.SSN, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="SSN"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.Phone, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="Phone"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.BankName, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="Bank Name"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.AccountNo, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="A/C No"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.LoanAmount, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="Loan Amount"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.Address, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="Address"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.City, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="City"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.State, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="State"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.Zip, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="ZIP"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.DOB, new { @class = "input100 form-control datepicker", @style = "border: none;", @autocomplete = "off" })
+                            <span class="focus-input100" data-placeholder="Select DOB"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.LicenceNo, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="License Number"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.LicenceState, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="License State"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="wrap-input100 validate-input mt-4 mb-5">
+                            @Html.TextBoxFor(x => x.Forms.IP, new { @class = "input100 form-control", @style = "border: none;" })
+                            <span class="focus-input100" data-placeholder="IP"></span>
+                        </div>
+                    </div>
+                    @if (ViewContext.RouteData.Values["id"] == null)
+                    {
+                        <div class="col-md-12 mb-4">
+                            <div class="text-center">
+                                <input type="submit" class="btn p-2 px-4 navy-blue-skin btn-primary text-white border-0 mr-2" name="submit" value="Submit" />
+                                <input type="submit" class="btn btn-info p-2 px-4 text-white border-0" name="submit" value="Save" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </div>
-</div>
+}
+
+
 
 

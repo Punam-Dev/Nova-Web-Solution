@@ -20,7 +20,7 @@ namespace NovaWebSolution.Repository
         public async Task<Users> GetUserByUserNameAndPassword(string userName, string password)
         {
             return await appDbContext.users.FirstOrDefaultAsync(user =>
-                    user.UserName == userName && user.Password == password && user.WorkStatus == true && user.WorkStatus == true
+                    user.UserName == userName && user.Password == password && user.Status == true
                 );
         }
 
@@ -33,7 +33,7 @@ namespace NovaWebSolution.Repository
 
         public void DeleteUser(string userID)
         {
-            var userForms = appDbContext.Forms.Where(x => x.UserCreatedByUserID == userID).ToList();
+            var userForms = appDbContext.Forms.Where(x => x.FormsCreatedByUserID == userID).ToList();
             var userQuery = appDbContext.FormQuery.Where(x => x.FormQueryCreatedByUserID == userID).ToList();
             var userLogInDetails = appDbContext.UserLogInDetails.Where(x => x.UserID == userID).ToList();
             var user = appDbContext.users.Find(userID);
@@ -60,10 +60,10 @@ namespace NovaWebSolution.Repository
                         join userForms in
                         (from f in appDbContext.Forms
                          where f.FormIsSubmit == true
-                         group f by new { f.UserCreatedByUserID } into r
+                         group f by new { f.FormsCreatedByUserID } into r
                          select new
                          {
-                             UserID = r.Key.UserCreatedByUserID,
+                             UserID = r.Key.FormsCreatedByUserID,
                              FormSubmited = r.Count()
                          }) on user.UserID equals userForms.UserID into userWithForms
                         from userForms in userWithForms.DefaultIfEmpty()
@@ -170,6 +170,11 @@ namespace NovaWebSolution.Repository
             appDbContext.SaveChanges();
         }
 
+        public async Task<List<UserLogInDetails>> GetUserLogInDetailsByID(string userid)
+        {
+            return await appDbContext.UserLogInDetails.Where(x => x.UserID == userid).ToListAsync();
+        }
+
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)
         {
@@ -189,5 +194,7 @@ namespace NovaWebSolution.Repository
 
             GC.SuppressFinalize(this);
         }
+
+        
     }
 }

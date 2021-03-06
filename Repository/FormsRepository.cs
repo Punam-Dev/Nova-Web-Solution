@@ -17,7 +17,7 @@ namespace NovaWebSolution.Repository
         }
         public async Task<Forms> CreateForm(Forms Forms)
         {
-            var result =  appDbContext.Forms.Add(Forms);
+            var result = appDbContext.Forms.Add(Forms);
             await appDbContext.SaveChangesAsync();
             return result;
         }
@@ -40,11 +40,11 @@ namespace NovaWebSolution.Repository
                 {
                     return await appDbContext.Forms.ToListAsync();
                 }
-                return await appDbContext.Forms.Where(x => x.UserCreatedByUserID == LoggedInUserID).ToListAsync();
+                return await appDbContext.Forms.Where(x => x.FormsCreatedByUserID == LoggedInUserID).ToListAsync();
             }
             else if (!string.IsNullOrEmpty(LoggedInUserID))
             {
-                return await appDbContext.Forms.Where(x => x.FormIsSubmit == isSubmit && x.UserCreatedByUserID == LoggedInUserID).ToListAsync();
+                return await appDbContext.Forms.Where(x => x.FormIsSubmit == isSubmit && x.FormsCreatedByUserID == LoggedInUserID).ToListAsync();
             }
             return await appDbContext.Forms.Where(x => x.FormIsSubmit == isSubmit).ToListAsync();
         }
@@ -67,6 +67,17 @@ namespace NovaWebSolution.Repository
         {
             appDbContext.FormQuery.AddRange(formQuery);
             appDbContext.SaveChanges();
+        }
+
+        public async Task<int> GetMaxFormNoOfUser(string userid)
+        {
+            var user = await appDbContext.users.FindAsync(userid);
+            return user.MaxFormsCount;
+        }
+
+        public async Task<int> GetTotalSubmitedFormOfUser(string userid)
+        {
+            return  await (from u in appDbContext.Forms where u.FormsCreatedByUserID == userid select (int?)u.FormNo).MaxAsync() ?? 0;
         }
 
         private bool disposed = false;
