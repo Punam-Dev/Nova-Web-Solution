@@ -1,0 +1,25 @@
+﻿@using NovaWebSolution.Models;
+@model List<UserLogInDetails>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>IP Address</th>
+                <th>Date</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var type = item.IsLogIn == true ? "LogIn" : "LogOut";
+                <tr>
+                    <td>@item.UserIP</td>
+                    <td>@item.CreatedDate.ToLongDateString()</td>
+                    <td>@type</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
