@@ -6,9 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -24,10 +26,46 @@ namespace NovaWebSolution.Controllers
             _emailSender = new AuthMailSender();
         }
 
-        [Authorize]
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Test()
         {
+            //string baseSourcePath = "https://skylinewebsolution.in/QuestionsImages/";
+            //string baseDestinationPath = HostingEnvironment.ApplicationPhysicalPath + "/QuestionsImages";
+
+            //if (!Directory.Exists(baseDestinationPath))
+            //{
+            //    Directory.CreateDirectory(baseDestinationPath);
+            //}
+            //int fileName = 1;
+            //for (int i = 1; i <= 2000; i++)
+            //{
+            //    using (WebClient client = new WebClient())
+            //    {
+            //        //client.DownloadFile(new Uri(url), @"c:\temp\image35.png");
+            //        // OR 
+            //        try
+            //        {
+            //            client.DownloadFile(new Uri(baseSourcePath + i.ToString() + ".PNG"), $"{baseDestinationPath}/{fileName.ToString()}.PNG");
+            //            fileName++;
+            //        }
+            //        catch (Exception)
+            //        {
+            //        }
+            //    }
+            //}
+
+            //string questionimagepath = HostingEnvironment.ApplicationPhysicalPath + "QuestionsImages";
+
+            //var arrFiles = Directory.GetFiles(baseSourcePath);
+
+            //DirectoryInfo d = new DirectoryInfo(questionimagepath);
+            //FileInfo[] infos = d.GetFiles();
+            //int index = 1;
+            //foreach (FileInfo f in infos)
+            //{
+            //    System.IO.File.Move(f.FullName, index.ToString() + ".PNG");
+            //    index++;
+            //}
             return View();
         }
 
@@ -146,7 +184,7 @@ namespace NovaWebSolution.Controllers
                 var user = accountRepository.GetUserByID(id);
                 if (user != null)
                 {
-                    String path = "~/DigitalSign";
+                    String path = HostingEnvironment.ApplicationPhysicalPath +"/DigitalSign";
 
                     if (!Directory.Exists(path))
                     {
@@ -195,7 +233,7 @@ namespace NovaWebSolution.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
             // fetch user by id. that no, name and email will go in agreement
 
