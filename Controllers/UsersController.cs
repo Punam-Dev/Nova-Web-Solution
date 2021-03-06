@@ -26,6 +26,14 @@ namespace NovaWebSolution.Controllers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
+            var roles = HttpContext.Session["roles"];
+            if(roles != null)
+            {
+                if(roles.ToString().ToLower() != "admin")
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
             var users = await accountRepository.GetUsers();
 
             return View(users);
@@ -61,20 +69,19 @@ namespace NovaWebSolution.Controllers
         }
 
         [HttpPost]
-        public void ChangeWorkStatus(string userID, bool workStatus)
+        public ActionResult ChangeWorkStatus(string userID, bool workStatus)
         {
             string loggedInUserID = Convert.ToString(Session["userid"]);
-            accountRepository.UpdateWorkStatus(userID, workStatus, loggedInUserID);
-
             string strWorkStatus = workStatus == true ? "active" : "inactive";
+
             if (userID == loggedInUserID)
             {
-                ToastrNotificationService.AddWarningNotification("You can not change your Work Status yourself", null);
+                return Json(new { success = false, responseText = "You can not change your Work Status yourself" }, JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                ToastrNotificationService.AddSuccessNotification("Work Status changed succesfully to " + strWorkStatus, null);
-            }
+
+            accountRepository.UpdateWorkStatus(userID, workStatus, loggedInUserID);
+
+            return Json(new { success = true, responseText = $"Work Status changed succesfully to { strWorkStatus }" }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -92,7 +99,7 @@ namespace NovaWebSolution.Controllers
                 {
                     users.UserID = Guid.NewGuid().ToString();
                     users.UserCreatedDate = DateTime.Now;
-                    users.UserCreatedByUserID = Convert.ToString( HttpContext.Session["userid"]);
+                    users.UserCreatedByUserID = Convert.ToString(HttpContext.Session["userid"]);
                     users.UserRoles = "user";
 
                     Random rnd = new Random();
@@ -101,7 +108,14 @@ namespace NovaWebSolution.Controllers
                     users.OTP = randomNumber;
                     await accountRepository.CreateUser(users);
 
-                    string verifyOTPUrl = $"{this.Request.Url.AbsoluteUri}Account/VerifyOTP/{users.UserID}";
+                    string strURL = this.Request.Url.Scheme + "://" + this.Request.Url.Host;
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(this.Request.Url.Port)))
+                    {
+                        strURL = strURL + ":" + Convert.ToString(this.Request.Url.Port);
+                    }
+
+                    string verifyOTPUrl = $"{strURL}/Account/VerifyOTP/{users.UserID}";
 
                     string body = "Hello " + users.FirstName + " " + users.LastName + "," +
                         "<br/><br/> Welcome to <b>Nova Web Solution</b>" +
@@ -117,6 +131,13 @@ namespace NovaWebSolution.Controllers
                 }
             }
             return View(users);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UserLogInDetails(string userid)
+        {
+            var userLogInDetails = await accountRepository.GetUserLogInDetailsByID(userid);
+            return PartialView("UserLogInDetails", userLogInDetails);
         }
     }
 }
