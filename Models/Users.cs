@@ -56,5 +56,7 @@ namespace NovaWebSolution.Models
         public DateTime UserCreatedDate { get; set; }
         public string UserUpdatedByUserID { get; set; }
         public DateTime? UserUpdatedDate { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

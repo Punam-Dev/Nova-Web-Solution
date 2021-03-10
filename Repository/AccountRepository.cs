@@ -172,7 +172,7 @@ namespace NovaWebSolution.Repository
 
         public async Task<List<UserLogInDetails>> GetUserLogInDetailsByID(string userid)
         {
-            return await appDbContext.UserLogInDetails.Where(x => x.UserID == userid).ToListAsync();
+            return await appDbContext.UserLogInDetails.Where(x => x.UserID == userid && x.UserIP != "::1").ToListAsync();
         }
 
         private bool disposed = false;

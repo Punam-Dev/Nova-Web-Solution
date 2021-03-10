@@ -184,7 +184,7 @@ namespace NovaWebSolution.Controllers
                 var user = accountRepository.GetUserByID(id);
                 if (user != null)
                 {
-                    String path = HostingEnvironment.ApplicationPhysicalPath +"/DigitalSign";
+                    String path = HostingEnvironment.ApplicationPhysicalPath +"DigitalSign";
 
                     if (!Directory.Exists(path))
                     {
@@ -192,7 +192,7 @@ namespace NovaWebSolution.Controllers
                     }
 
                     signUpDto.DigitalSignatureData = signUpDto.DigitalSignatureData.Replace("data:image/jpeg;base64,", "");
-                    path = path + "//Sign_" + id + ".jpg";
+                    path = path + "\\Sign_" + id + ".jpg";
                     user.DigitalSignPath = path;
 
                     byte[] bytes = Convert.FromBase64String(signUpDto.DigitalSignatureData);

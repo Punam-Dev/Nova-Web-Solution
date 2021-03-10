@@ -33,7 +33,7 @@ namespace NovaWebSolution.Controllers
             LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
             var user = accountRepository.GetUserByID(LoggedInUserID);
 
-            if (user.WorkStatus == false)
+            if (user.WorkStatus == false || user.ActivationDate > DateTime.Now || user.IsActive == false )
             {
                 return RedirectToAction("Report");
             }
@@ -59,7 +59,7 @@ namespace NovaWebSolution.Controllers
             LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
             var user = accountRepository.GetUserByID(LoggedInUserID);
 
-            if (user.WorkStatus == false)
+            if (user.WorkStatus == false || user.ActivationDate > DateTime.Now || user.IsActive == false)
             {
                 return RedirectToAction("Report");
             }
@@ -188,7 +188,7 @@ namespace NovaWebSolution.Controllers
             LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
             var user = accountRepository.GetUserByID(LoggedInUserID);
 
-            if (user.WorkStatus == false)
+            if (user.WorkStatus == false || user.ActivationDate > DateTime.Now || user.IsActive == false)
             {
                 return RedirectToAction("Report");
             }
@@ -262,7 +262,7 @@ namespace NovaWebSolution.Controllers
             LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
             var user = accountRepository.GetUserByID(LoggedInUserID);
 
-            if (user.WorkStatus == false)
+            if (user.WorkStatus == false || user.ActivationDate > DateTime.Now || user.IsActive == false)
             {
                 return RedirectToAction("Report");
             }

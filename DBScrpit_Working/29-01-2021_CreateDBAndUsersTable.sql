@@ -20,6 +20,8 @@ Create Table Users
 	OTP int,
 	DigitalSignPath nVarChar(2048),
 	AgreementPath nVarChar(2048),
+	MaxFormsCount Int Not Null Default 698,
+	IsActive Bit Not Null Default 1,
 	UserCreatedByUserID Char(36),
 	UserCreatedDate DateTime Not Null,
 	UserUpdatedByUserID Char(36),

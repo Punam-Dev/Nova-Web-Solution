@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using NovaWebSolution.Services;
+using Microsoft.Reporting.WebForms;
 
 namespace NovaWebSolution.Controllers
 {
@@ -34,6 +35,15 @@ namespace NovaWebSolution.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
+
+            string LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
+            var user = accountRepository.GetUserByID(LoggedInUserID);
+
+            if (user.WorkStatus == false || user.ActivationDate > DateTime.Now || user.IsActive == false)
+            {
+                return RedirectToAction("Report");
+            }
+
             var users = await accountRepository.GetUsers();
 
             return View(users);
@@ -87,6 +97,14 @@ namespace NovaWebSolution.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            string LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
+            var user = accountRepository.GetUserByID(LoggedInUserID);
+
+            if (user.WorkStatus == false || user.ActivationDate > DateTime.Now || user.IsActive == false)
+            {
+                return RedirectToAction("Report");
+            }
+
             return View();
         }
 
@@ -100,6 +118,8 @@ namespace NovaWebSolution.Controllers
                     users.UserID = Guid.NewGuid().ToString();
                     users.UserCreatedDate = DateTime.Now;
                     users.UserCreatedByUserID = Convert.ToString(HttpContext.Session["userid"]);
+                    users.IsActive = true;
+                    users.MaxFormsCount = 698;
                     users.UserRoles = "user";
 
                     Random rnd = new Random();
@@ -138,6 +158,48 @@ namespace NovaWebSolution.Controllers
         {
             var userLogInDetails = await accountRepository.GetUserLogInDetailsByID(userid);
             return PartialView("UserLogInDetails", userLogInDetails);
+        }
+
+        [HttpPost]
+        public async Task<FileResult> DownloadReport(string id, string firstName, string lastName)
+        {
+            var result = await accountRepository.GetUserLogInDetailsByID(id);
+
+            //string RptPath = Server.MapPath("~/RDLC/rptUserLogInDetails.rdlc");
+            string RptPath = Server.MapPath("~/RDLC/rptUserLogInDetails.rdlc");
+
+            ReportViewer rv = new ReportViewer();
+
+            ReportDataSource rds = new ReportDataSource();
+            rds.Name = "DataSet1";
+            rds.Value = result;
+
+            ReportParameter[] parameters = new ReportParameter[1];
+            parameters[0] = new ReportParameter("username",  firstName + " " + lastName);
+
+            //ReportViewer rv = new Microsoft.Reporting.WebForms.ReportViewer();
+            rv.ProcessingMode = ProcessingMode.Local;
+            rv.LocalReport.ReportPath = RptPath;
+
+            // Add the new report datasource to the report.
+            rv.LocalReport.DataSources.Add(rds);
+            rv.LocalReport.EnableHyperlinks = true;
+
+            rv.LocalReport.SetParameters(parameters);
+
+            rv.LocalReport.Refresh();
+
+            byte[] streamBytes = null;
+            string mimeType = "";
+            string encoding = "";
+            string filenameExtension = "";
+            string[] streamids = null;
+            Warning[] warnings = null;
+
+            streamBytes = rv.LocalReport.Render("PDF", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);
+
+            string fileName = "LogInDetails-" + firstName + lastName + ".pdf";
+            return File(streamBytes, mimeType, fileName);
         }
     }
 }
