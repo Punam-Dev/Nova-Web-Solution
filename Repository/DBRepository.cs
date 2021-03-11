@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 
 namespace NovaWebSolution.Repository
 {
@@ -23,9 +24,15 @@ namespace NovaWebSolution.Repository
         }
         public DataTable GetDataFromRawSQL(string commandText)
         {
-            string CS = ConfigurationManager.ConnectionStrings["DbCon"].ConnectionString;
+            string DevMode = WebConfigurationManager.AppSettings["DevMode"];
+            string defaultCS = "DbCon";
+            if(DevMode == "0")
+            {
+                defaultCS = "DbConNova";
+            }
+
+            string CS = ConfigurationManager.ConnectionStrings[defaultCS].ConnectionString;
             SqlConnection con = new SqlConnection(CS);
-            SqlCommand selectCMD = new SqlCommand(commandText, con);
 
             SqlDataAdapter sda = new SqlDataAdapter(commandText,con);
             
