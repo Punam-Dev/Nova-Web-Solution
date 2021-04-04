@@ -838,6 +838,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DotIndiaPvtLtdDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Dtos\ChangePasswordDto.cs" />
     <Compile Include="Dtos\CreateFormDto.cs" />
     <Compile Include="Dtos\DBSqlDto.cs" />
     <Compile Include="Dtos\FormQueryDto.cs" />
@@ -912,6 +913,7 @@
     <Content Include="Views\DB\Index.cshtml" />
     <Content Include="Views\Account\Test.cshtml" />
     <Content Include="Views\Users\UserLogInDetails.cshtml" />
+    <Content Include="Views\Users\ChangePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
