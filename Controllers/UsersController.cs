@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using NovaWebSolution.Services;
 using Microsoft.Reporting.WebForms;
+using NovaWebSolution.Dtos;
 
 namespace NovaWebSolution.Controllers
 {
@@ -200,6 +201,55 @@ namespace NovaWebSolution.Controllers
 
             string fileName = "LogInDetails-" + firstName + lastName + ".pdf";
             return File(streamBytes, mimeType, fileName);
+        }
+
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            if (ModelState.IsValid)
+            {
+                string userid = Convert.ToString(HttpContext.Session["userid"]);
+
+                if (!string.IsNullOrEmpty(userid))
+                {
+                    if(changePasswordDto.Password == changePasswordDto.NewPassword)
+                    {
+                        ToastrNotificationService.AddWarningNotification("Password and New Password can't be same", null);
+                    }
+                    else if(changePasswordDto.NewPassword != changePasswordDto.ConfirmPassword)
+                    {
+                        ToastrNotificationService.AddWarningNotification("New Password and Confirm Password must be same", null);
+                    }
+                    else
+                    {
+                        var user = accountRepository.GetUserByID(userid);
+                        if(user != null)
+                        {
+                            if(user.Password == changePasswordDto.Password)
+                            {
+                                await accountRepository.ChangePassword(changePasswordDto);
+                                ToastrNotificationService.AddSuccessNotification("Password changed successfully", null);
+
+                                return RedirectToAction("Index", "Home");
+                            }
+                            else
+                            {
+                                ToastrNotificationService.AddWarningNotification("Invaild Password", null);
+                                ModelState.AddModelError("Password", "Invaild Password");
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            
+            return View(changePasswordDto);
         }
     }
 }
