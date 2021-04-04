@@ -27,6 +27,9 @@ namespace NovaWebSolution.Security
             }
             else
             {
+                //Now If Work Status = false then we will redirecting to another page where it shows qc report is pending
+
+                
                 //AccountRepository accountRepository = new AccountRepository(new AppDbContext());
                 //var user = accountRepository.GetUserByID(userId);
                 //if (user.WorkStatus == false)
