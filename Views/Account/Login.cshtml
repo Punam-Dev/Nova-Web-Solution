@@ -113,7 +113,7 @@
                                     <i class="fas fa-key"></i>
                                 </span>
                             </div>
-                            @Html.TextBoxFor(x => x.Password, new { @class = "form-control input_user", @placeholder = "password" })
+                            @Html.PasswordFor(x => x.Password, new { @class = "form-control input_user", @placeholder = "password" })
                             @Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
                         </div>
                         <div class="d-flex justify-content-center mt-3 login_container">
