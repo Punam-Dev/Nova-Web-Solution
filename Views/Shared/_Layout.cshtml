@@ -101,6 +101,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-light" href="@Url.Action("ChangePassword","Users")">Change Password</a>
+                        </li>
+                        <li class="nav-item">
                             @using (Html.BeginForm("LogOut", "Account"))
                             {
                                 <input type="submit" value="Log Out" class="nav-link text-light bg-transparent border-0" />
