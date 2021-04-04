@@ -195,6 +195,10 @@ namespace NovaWebSolution.Repository
             GC.SuppressFinalize(this);
         }
 
-        
+        public async Task<int> ChangePassword(ChangePasswordDto changePasswordDto)
+        {
+            string userid = Convert.ToString(HttpContext.Current.Session["userid"]);
+            return await appDbContext.Database.ExecuteSqlCommandAsync("Update Users SET Password = {0} Where UserID = {1}", changePasswordDto.NewPassword, userid);
+        }
     }
 }

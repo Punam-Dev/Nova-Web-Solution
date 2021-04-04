@@ -21,5 +21,6 @@ namespace NovaWebSolution.Repository
         Task<int> StopWorkStatusOfAllUser(string excludeUserID);
         void SaveUserLogInDetails(UserLogInDetails userLogInDetails);
         Task<List<UserLogInDetails>> GetUserLogInDetailsByID(string userid);
+        Task<int> ChangePassword(ChangePasswordDto changePasswordDto);
     }
 }
