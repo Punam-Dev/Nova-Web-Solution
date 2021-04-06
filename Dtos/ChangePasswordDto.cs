@@ -22,5 +22,6 @@ namespace NovaWebSolution.Dtos
         [Compare("NewPassword", ErrorMessage = "New password and confirm password must match")]
         [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
+
     }
 }
