@@ -93,21 +93,23 @@
                                 </li>
                             }
                         }
-
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="#">
                                 <i class="fa fa-calendar-alt" aria-hidden="true"></i>
                                 Date: @DateTime.Now.ToString("dd MMM yyyy")
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" href="@Url.Action("ChangePassword","Users")">Change Password</a>
-                        </li>
-                        <li class="nav-item">
-                            @using (Html.BeginForm("LogOut", "Account"))
-                            {
-                                <input type="submit" value="Log Out" class="nav-link text-light bg-transparent border-0" />
-                            }
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-p" aria-labelledby="navbarDropdown">
+                                @using (Html.BeginForm("LogOut", "Account"))
+                                {
+                                    <a class="dropdown-item" href="javascript:;" onclick="document.forms[0].submit();">Log Out</a>
+                                }
+                                <a class="dropdown-item" href="@Url.Action("ChangePassword","Users")">Change Password</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
