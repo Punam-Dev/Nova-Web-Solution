@@ -93,6 +93,7 @@ namespace NovaWebSolution.Controllers
                 forms.FormImagePath = Form.FormImagePath;
 
                 createFormDto.Forms = forms;
+                createFormDto.MaxFormCountOfUser = await formsRepository.GetMaxFormNoOfUser(LoggedInUserID);
 
                 List<FormQueryDto> formQueryDtos = new List<FormQueryDto>()
                 {
