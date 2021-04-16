@@ -7,6 +7,7 @@ using System.Net.Configuration;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 
 namespace NovaWebSolution.Services
 {
@@ -16,9 +17,10 @@ namespace NovaWebSolution.Services
         {
             try
             {
+                string companyName = WebConfigurationManager.AppSettings["CompanyName"];
                 SmtpSection section = (SmtpSection)ConfigurationManager.GetSection("system.net/mailSettings/smtp");
 
-                var senderEmail = new MailAddress(section.From, "Nova Web Solution");
+                var senderEmail = new MailAddress(section.From, companyName);
                 var receiverEmail = new MailAddress(toEmail);
                 //var password = "punam@123";
                 var password = section.Network.Password;

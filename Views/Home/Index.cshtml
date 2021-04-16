@@ -1,7 +1,9 @@
 ﻿@using NovaWebSolution.Dtos;
+@using System.Web.Configuration;
 @model HomeCardDto
 @{
     ViewBag.Title = "Index";
+    string companyName = WebConfigurationManager.AppSettings["CompanyName"];
 }
 
 @{
@@ -9,7 +11,7 @@
 }
 
 <div class="text-center">
-    Welcome to Nova Web Solution
+    Welcome to @companyName
 </div>
 <div class="row mt-3">
     <div class="col-sm-4">

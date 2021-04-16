@@ -10,6 +10,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -219,13 +220,17 @@ namespace NovaWebSolution.Controllers
                     user.Password = password;
                     await accountRepository.UpdateUser(user);
 
+                    string companyName = WebConfigurationManager.AppSettings["CompanyName"];
+                    string companyURL = WebConfigurationManager.AppSettings["CompanyURL"];
+
                     string body = "Hello " + user.FirstName + " " + user.LastName + "," +
-                        "<br/><br/> Welcome to Nova Web Solution" +
+                        "<br/><br/> Welcome to " + companyName +
                         "<br/><br/> Your login credential is, " +
                         "<br/>Username: " + userName +
                         "<br/>Password: " + password +
-                        "<br/><br/>URL to Login:<a href=\"https://novawebsolution.co.in\">https://novawebsolution.co.in</a> <br/>Thank You.";
-                    await _emailSender.SendEmailAsync(user.Email, "Welcome to Nova Web Solution", body);
+                        "<br/><br/>URL to Login:<a href=\""+ companyURL +"\">"+
+                        companyURL +"</a> <br/>Thank You.";
+                    await _emailSender.SendEmailAsync(user.Email, "Welcome to "+ companyName, body);
 
                     return Json(signUpDto);
 

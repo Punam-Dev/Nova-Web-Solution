@@ -33,7 +33,7 @@ namespace NovaWebSolution.Controllers
             LoggedInUserID = Convert.ToString(HttpContext.Session["userid"]);
             var user = accountRepository.GetUserByID(LoggedInUserID);
 
-            if (user.WorkStatus == false || user.ActivationDate > DateTime.Now || user.IsActive == false )
+            if (user.WorkStatus == false || user.ActivationDate > DateTime.Now || user.IsActive == false)
             {
                 return RedirectToAction("Report");
             }
@@ -124,6 +124,26 @@ namespace NovaWebSolution.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(CreateFormDto createFormDto, string submit, string id)
         {
+            if (TempData.ContainsKey("UserID"))
+            {
+                LoggedInUserID = TempData.Peek("UserID").ToString();
+            }
+            if (string.IsNullOrEmpty(LoggedInUserID))
+            {
+                return RedirectToAction("LogIn", "Account");
+            }
+
+            if (string.IsNullOrEmpty(id))
+            {
+                int maxFormCount = await formsRepository.GetTotalSubmitedFormOfUser(LoggedInUserID);
+
+                if (createFormDto.Forms.FormNo <= maxFormCount)
+                {
+                    ToastrNotificationService.AddSuccessNotification("You already filled this form", null);
+                    return RedirectToAction("Create");
+                }
+            }
+
             Forms forms = new Forms();
 
             forms.FirstName = createFormDto.Forms.FirstName;
@@ -155,21 +175,18 @@ namespace NovaWebSolution.Controllers
             }
             forms.FormsCreatedDate = DateTime.Now;
 
-            if (TempData.ContainsKey("UserID"))
-            {
-                LoggedInUserID = TempData.Peek("UserID").ToString();
-            }
+            forms.FormsCreatedByUserID = LoggedInUserID;
 
-            if (!string.IsNullOrEmpty(LoggedInUserID))
+            try
             {
-                forms.FormsCreatedByUserID = LoggedInUserID;
+                var createdForm = await formsRepository.CreateForm(forms);
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("LogIn", "Account");
+                ToastrNotificationService.AddSuccessNotification("You already filled this form", null);
+                return RedirectToAction("Create");
             }
-
-            var createdForm = await formsRepository.CreateForm(forms);
+            
 
             if (forms.FormIsSubmit)
             {

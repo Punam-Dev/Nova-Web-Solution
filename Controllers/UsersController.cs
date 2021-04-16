@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using NovaWebSolution.Services;
 using Microsoft.Reporting.WebForms;
 using NovaWebSolution.Dtos;
+using System.Web.Configuration;
 
 namespace NovaWebSolution.Controllers
 {
@@ -138,13 +139,16 @@ namespace NovaWebSolution.Controllers
 
                     string verifyOTPUrl = $"{strURL}/Account/VerifyOTP/{users.UserID}";
 
+                    string companyName = WebConfigurationManager.AppSettings["CompanyName"];
+                    string companyURL = WebConfigurationManager.AppSettings["CompanyURL"];
+
                     string body = "Hello " + users.FirstName + " " + users.LastName + "," +
-                        "<br/><br/> Welcome to <b>Nova Web Solution</b>" +
+                        "<br/><br/> Welcome to <b>" + companyName  + "</b>" +
                         "<br/><br/> Please click the following link to activate your account " +
                         "<br/><a href=\"" + verifyOTPUrl + "\">click here</a><br/>" +
                         "Use OTP code " + randomNumber.ToString() + " to activate your account.<br/><br/>" +
-                        "URL to Login:<a href=\"https://novawebsolution.co.in\">https://novawebsolution.co.in</a> <br/>Thank You.";
-                    await _emailSender.SendEmailAsync(users.Email, "Welcome to Nova Web Solution", body);
+                        "URL to Login:<a href=\"" + companyURL + "\">" + companyURL + "</a> <br/>Thank You.";
+                    await _emailSender.SendEmailAsync(users.Email, "Welcome to " + companyName, body);
 
                     ToastrNotificationService.AddSuccessNotification("User Created Succesfully", null);
 
@@ -175,8 +179,11 @@ namespace NovaWebSolution.Controllers
             rds.Name = "DataSet1";
             rds.Value = result;
 
-            ReportParameter[] parameters = new ReportParameter[1];
+            string companyName = WebConfigurationManager.AppSettings["CompanyName"];
+
+            ReportParameter[] parameters = new ReportParameter[2];
             parameters[0] = new ReportParameter("username",  firstName + " " + lastName);
+            parameters[1] = new ReportParameter("companyName", companyName);
 
             //ReportViewer rv = new Microsoft.Reporting.WebForms.ReportViewer();
             rv.ProcessingMode = ProcessingMode.Local;

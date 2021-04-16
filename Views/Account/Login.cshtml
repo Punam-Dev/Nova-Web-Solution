@@ -1,4 +1,5 @@
 ﻿@using NovaWebSolution.Dtos;
+@using System.Web.Configuration;
 @{
     ViewBag.Title = "Login";
 }
@@ -6,6 +7,8 @@
 @model UserLogInDto
 @{
     Layout = null;
+
+    string companyName = WebConfigurationManager.AppSettings["CompanyName"];
 }
 
 <!DOCTYPE html>
@@ -13,7 +16,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - NovaWebSolution</title>
+    <title>@ViewData["Title"] - @companyName</title>
     <link rel="stylesheet" href="~/Contents/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css" />
     <link rel="stylesheet" href="~/Contents/css/site.css"/>

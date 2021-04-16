@@ -33,3 +33,8 @@ Create Table Forms(
 --Truncate table forms
 
 --Select * from forms
+
+Go
+
+ALTER TABLE novaweb.Forms
+ADD CONSTRAINT UQ_Forms_FormNo_FormsCreatedByUserID UNIQUE (FormNo, FormsCreatedByUserID)

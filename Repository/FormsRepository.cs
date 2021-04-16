@@ -17,9 +17,17 @@ namespace NovaWebSolution.Repository
         }
         public async Task<Forms> CreateForm(Forms Forms)
         {
-            var result = appDbContext.Forms.Add(Forms);
-            await appDbContext.SaveChangesAsync();
-            return result;
+            try
+            {
+                var result = appDbContext.Forms.Add(Forms);
+                await appDbContext.SaveChangesAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
         public void DeleteForm(Int64 FormID)
